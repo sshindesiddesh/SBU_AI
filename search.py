@@ -87,6 +87,42 @@ def depthFirstSearch(problem):
     print "Start's successors:", problem.getSuccessors(problem.getStartState())
     """
     "*** YOUR CODE HERE ***"
+    out = []
+    #suc = []
+    from game import Directions
+    from util import Stack
+    st = Stack()
+    visited = []
+    state  = problem.getStartState()
+    print "Start:", state
+    so = problem.getSuccessors(state)
+    #stack st
+    #st.push(state)
+    #print suc
+    i = 0
+
+#   print problem.getCostOfActions(actions)
+    while (~problem.isGoalState(so[0][0])) :
+    	#print problem.isGoalState(state)
+	visited.append(so[0])
+	
+        suc = problem.getSuccessors(so[0][0])
+    	print "Suc", suc
+    	for so in suc:
+		print i
+		if so[0] not in visited:
+			st.push(so[0])
+	if ~st.isEmpty() :
+		so[0] = st.pop()
+    while (~st.isEmpty()) :
+	sp = st.pop()
+	out.insert(0, sp[1])
+	
+     #return out
+#    from game import Directions
+#    s = Directions.SOUTH
+#    w = Directions.WEST
+#    return  [s, s, w, s, w, w, s, w]
     util.raiseNotDefined()
 
 def breadthFirstSearch(problem):

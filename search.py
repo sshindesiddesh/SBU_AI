@@ -132,7 +132,7 @@ def depthFirstSearch(problem):
 		# push to frontier if not visited or if not in frontier
 		for s in suc:
 			if s[0] not in visited : # if state is not visited yet
-				if (s[0] not in [item for item in st.list if item[0] == s[0]]) : # if state is not in stack
+				if (s[0] not in [item[0] for item in st.list if item[0] == s[0]]) : # if state is not in stack
 					c = list(s)
 					c[1] = c[1].split()
 					c[1] = p[1] + c[1] # update actions for every state right from the start state 
@@ -187,8 +187,10 @@ def breadthFirstSearch(problem):
 		#For every state in successors,
 		# push to frontier if not visited or if not in frontier
 		for s in suc:
+			f_list = [item[0] for item in qu.list if item[0] == s[0]]
+			print f_list
 			if s[0] not in visited : # if state is not visited yet
-				if (s[0] not in [item for item in qu.list if item[0] == s[0]]) : # if state is not in stack
+				if (s[0] not in [item[0] for item in qu.list if item[0] == s[0]]) : # if state is not in stack
 					c = list(s)
 					c[1] = c[1].split()
 					c[1] = p[1] + c[1] # update actions for every state right from the start state 
@@ -196,9 +198,76 @@ def breadthFirstSearch(problem):
 	util.raiseNotDefined()
 
 def uniformCostSearch(problem):
-    """Search the node of least total cost first."""
-    "*** YOUR CODE HERE ***"
-    util.raiseNotDefined()
+	"""Search the node of least total cost first."""
+	"*** YOUR CODE HERE ***"
+	# Use Queue for the frontier
+	from util import PriorityQueue
+	qu = PriorityQueue()
+
+	# Maintain a list of already visited states
+	visited = []
+
+	# Get the start state
+	state  = problem.getStartState()
+	# Put it in visited array
+	visited.append(state)
+	# Get the list of successor states
+	suc = problem.getSuccessors(state)
+
+	# For every state in successors,
+	# push to frontier if not visited
+	for s in suc:
+		if s[0] not in visited:
+			l = list(s)
+			l[1] = l[1].split()
+			qu.push(l, l[2])
+
+	while (1) :
+
+		# finish when the frontier is empty
+		if qu.isEmpty() :
+			break;
+
+		#print "Q", qu.heap
+		# visit state
+		p = qu.pop()
+		visited.append(p[0])
+
+		# end on reaching goal state
+		if (problem.isGoalState(p[0])) :
+			return p[1]
+			break;
+
+		# Get the list of successor states
+		suc = problem.getSuccessors(p[0])
+
+		#For every state in successors,
+		# push to frontier if not visited or if not in frontier
+		for s in suc:
+			if ((s[0] not in visited)) :
+					c = list(s)
+					c[1] = c[1].split()
+					c[1] = p[1] + c[1] # update actions for every state right from the start state
+					c[2] = p[2]  + c[2]
+					qu.update(c, c[2])
+#			f_list = [item[2][0] for item in qu.heap if item[2][0] == s[0]]
+			#print f_list
+#			if ((s[0] not in visited) or (s[0] not in f_list)) : 
+# if state is not in stack and if state is not visited yet
+#					c = list(s)
+#					c[1] = c[1].split()
+#					c[1] = p[1] + c[1] # update actions for every state right from the start state
+#					c[2] = p[2]  + c[2]
+#					qu.push(c, c[2])
+#			else :
+#				if (s[0] in f_list) :
+#					cf_list = [item[2][2] for item in qu.heap if item[2][0] == s[0]]
+#					c = list(s)
+#					c[1] = c[1].split()
+#					if (s[2] < cf_list[0]) :
+#						qu.update(c, s[2])
+
+	util.raiseNotDefined()
 
 def nullHeuristic(state, problem=None):
     """

@@ -141,11 +141,59 @@ def depthFirstSearch(problem):
 	util.raiseNotDefined()
 
 def breadthFirstSearch(problem):
-    """Search the shallowest nodes in the search tree first."""
-    "*** YOUR CODE HERE ***"
-	
-	
-    util.raiseNotDefined()
+	"""Search the shallowest nodes in the search tree first."""
+	"*** YOUR CODE HERE ***"
+
+	# Use Queue for the frontier
+	from util import Queue
+	qu = Queue()
+
+	# Maintain a list of already visited states
+	visited = []
+
+	# Get the start state
+	state  = problem.getStartState()
+	# Put it in visited array
+	visited.append(state)
+	# Get the list of successor states
+	suc = problem.getSuccessors(state)
+
+	# For every state in successors,
+	# push to frontier if not visited
+	for s in suc:
+		if s[0] not in visited:
+			l = list(s)
+			l[1] = l[1].split()
+			qu.push(l)
+
+	while (1) :
+
+		# finish when the frontier is empty
+		if qu.isEmpty() :
+			break;
+
+		# visit state
+		p = qu.pop()
+		visited.append(p[0])
+
+		# end on reaching goal state
+		if (problem.isGoalState(p[0])) :
+			return p[1]
+			break;
+
+		# Get the list of successor states
+		suc = problem.getSuccessors(p[0])
+
+		#For every state in successors,
+		# push to frontier if not visited or if not in frontier
+		for s in suc:
+			if s[0] not in visited : # if state is not visited yet
+				if (s[0] not in [item for item in qu.list if item[0] == s[0]]) : # if state is not in stack
+					c = list(s)
+					c[1] = c[1].split()
+					c[1] = p[1] + c[1] # update actions for every state right from the start state 
+					qu.push(c)
+	util.raiseNotDefined()
 
 def uniformCostSearch(problem):
     """Search the node of least total cost first."""

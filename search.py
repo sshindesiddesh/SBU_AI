@@ -73,61 +73,78 @@ def tinyMazeSearch(problem):
     return  [s, s, w, s, w, w, s, w]
 
 def depthFirstSearch(problem):
-    """
-    Search the deepest nodes in the search tree first.
+	"""
+	Search the deepest nodes in the search tree first.
 
-    Your search algorithm needs to return a list of actions that reaches the
-    goal. Make sure to implement a graph search algorithm.
+	Your search algorithm needs to return a list of actions that reaches the
+	goal. Make sure to implement a graph search algorithm.
 
-    To get started, you might want to try some of these simple commands to
-    understand the search problem that is being passed in:
+	To get started, you might want to try some of these simple commands to
+	understand the search problem that is being passed in:
 
-    print "Start:", problem.getStartState()
-    print "Is the start a goal?", problem.isGoalState(problem.getStartState())
-    print "Start's successors:", problem.getSuccessors(problem.getStartState())
-    """
-    "*** YOUR CODE HERE ***"
-    from util import Stack
-    st = Stack()
-    visited = []
+	print "Start:", problem.getStartState()
+	print "Is the start a goal?", problem.isGoalState(problem.getStartState())
+	print "Start's successors:", problem.getSuccessors(problem.getStartState())
+	"""
+	"*** YOUR CODE HERE ***"
 
-    state  = problem.getStartState()
-    visited.append(state)
-    suc = problem.getSuccessors(state)
+	# Use Stack for the frontier
+	from util import Stack
+	st = Stack()
 
-    for s in suc:
-	if s[0] not in visited:
-		l = list(s)
-		print "pushed", l[0]
-		l[1] = l[1].split()
-		print l
-		st.push(l)
+	# Maintain a list of already visited states
+	visited = []
 
-    while (1) :
-	if st.isEmpty() :
-		break;
+	# Get the start state
+	state  = problem.getStartState()
+	# Put it in visited array
+	visited.append(state)
+	# Get the list of successor states
+	suc = problem.getSuccessors(state)
 
-	p = st.pop()
-	visited.append(p[0])
-
-	if (problem.isGoalState(p[0])) :
-		return p[1]
-		break;
-
-        suc = problem.getSuccessors(p[0])
+	# For every state in successors,
+	# push to frontier if not visited
 	for s in suc:
-		if s[0] not in visited :
-			if (s[0] not in [item for item in st.list if item[0] == s[0]]) :
-				c = list(s)
-				c[1] = c[1].split()
-				c[1] = p[1] + c[1]
-				st.push(c)
+		if s[0] not in visited:
+			l = list(s)
+			l[1] = l[1].split()
+			st.push(l)
 
-    util.raiseNotDefined()
+	while (1) :
+
+		# finish when the frontier is empty
+		if st.isEmpty() :
+			break;
+
+		# visit state
+		p = st.pop()
+		visited.append(p[0])
+
+		# end on reaching goal state
+		if (problem.isGoalState(p[0])) :
+			return p[1]
+			break;
+
+		# Get the list of successor states
+		suc = problem.getSuccessors(p[0])
+
+		#For every state in successors,
+		# push to frontier if not visited or if not in frontier
+		for s in suc:
+			if s[0] not in visited : # if state is not visited yet
+				if (s[0] not in [item for item in st.list if item[0] == s[0]]) : # if state is not in stack
+					c = list(s)
+					c[1] = c[1].split()
+					c[1] = p[1] + c[1] # update actions for every state right from the start state 
+					st.push(c)
+
+	util.raiseNotDefined()
 
 def breadthFirstSearch(problem):
     """Search the shallowest nodes in the search tree first."""
     "*** YOUR CODE HERE ***"
+	
+	
     util.raiseNotDefined()
 
 def uniformCostSearch(problem):

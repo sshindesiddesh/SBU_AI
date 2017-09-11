@@ -277,10 +277,60 @@ def nullHeuristic(state, problem=None):
     return 0
 
 def aStarSearch(problem, heuristic=nullHeuristic):
-    """Search the node that has the lowest combined cost and heuristic first."""
-    "*** YOUR CODE HERE ***"
-    util.raiseNotDefined()
+	"""Search the node that has the lowest combined cost and heuristic first."""
+	"*** YOUR CODE HERE ***"
+	# Use Queue for the frontier
+	from util import PriorityQueue
+	qu = PriorityQueue()
 
+	# Maintain a list of already visited states
+	visited = []
+
+	# Get the start state
+	state  = problem.getStartState()
+	# Put it in visited array
+	visited.append(state)
+	# Get the list of successor states
+	suc = problem.getSuccessors(state)
+
+	# For every state in successors,
+	# push to frontier if not visited
+	for s in suc:
+		if s[0] not in visited:
+			l = list(s)
+			l[1] = l[1].split()
+			l[2] = l[2] + heuristic(s[0], problem)
+			qu.push(l, l[2])
+
+	while (1) :
+
+		# finish when the frontier is empty
+		if qu.isEmpty() :
+			break;
+
+		#print "Q", qu.heap
+		# visit state
+		p = qu.pop()
+		visited.append(p[0])
+
+		# end on reaching goal state
+		if (problem.isGoalState(p[0])) :
+			return p[1]
+			break;
+
+		# Get the list of successor states
+		suc = problem.getSuccessors(p[0])
+
+		#For every state in successors,
+		# push to frontier if not visited or if not in frontier
+		for s in suc:
+			if ((s[0] not in visited)) :
+					c = list(s)
+					c[1] = c[1].split()
+					c[1] = p[1] + c[1] # update actions for every state right from the start state
+					c[2] = p[2]  + c[2] + heuristic(s[0], problem)
+					qu.update(c, c[2])
+	util.raiseNotDefined()
 
 # Abbreviations
 bfs = breadthFirstSearch

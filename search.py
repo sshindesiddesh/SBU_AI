@@ -284,8 +284,7 @@ def aStarSearch(problem, heuristic=nullHeuristic):
 		if s[0] not in visited:
 			l = list(s)
 			l[1] = l[1].split()
-			l[2] = l[2] + heuristic(s[0], problem)
-			qu.push(l, l[2])
+			qu.push(l, l[2] + heuristic(s[0], problem))
 
 	while (1) :
 
@@ -314,8 +313,8 @@ def aStarSearch(problem, heuristic=nullHeuristic):
 							c = list(s)
 							c[1] = c[1].split()
 							c[1] = p[1] + c[1] # update actions for every state right from the start state
-							c[2] = p[2]  + c[2] + heuristic(s[0], problem)
-							qu.update(c, c[2])
+							c[2] = p[2]  + c[2]
+							qu.update(c, c[2] + heuristic(s[0], problem))
 	util.raiseNotDefined()
 
 # Abbreviations

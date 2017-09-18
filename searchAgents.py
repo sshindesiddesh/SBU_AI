@@ -504,6 +504,15 @@ def foodHeuristic(state, problem):
     problem.heuristicInfo['wallCount']
     """
     position, foodGrid = state
+    food = foodGrid.asList()
+    max_d = 0
+    for i in food:
+        man_d = util.manhattanDistance(position, i)
+        if (man_d < 0) :
+		    print man_d
+        if (man_d > max_d) :
+            max_d = man_d
+    return max_d
     "*** YOUR CODE HERE ***"
     return 0
 

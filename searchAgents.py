@@ -441,6 +441,9 @@ class FoodSearchProblem:
     def isGoalState(self, state):
         return state[1].count() == 0
 
+    def getGameState(self):
+        return self.startingGameState
+
     def getSuccessors(self, state):
         "Returns successor states, the actions they require, and a cost of 1."
         successors = []
@@ -505,14 +508,21 @@ def foodHeuristic(state, problem):
     """
     position, foodGrid = state
     food = foodGrid.asList()
-    max_d = 0
+    food_c = []
+
+    if not food:
+         return 0;
+
     for i in food:
-        man_d = util.manhattanDistance(position, i)
-        if (man_d > max_d) :
+        food_c.append(i)
+
+    max_d1 = 0
+    for i in food_c:
+        man_d = mazeDistance(position, i, problem.getGameState())
+        if (man_d > max_d1) :
             max_d = man_d
+
     return max_d
-    "*** YOUR CODE HERE ***"
-    return 0
 
 class ClosestDotSearchAgent(SearchAgent):
     "Search for all food using a sequence of searches"

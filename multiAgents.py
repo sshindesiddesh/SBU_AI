@@ -74,24 +74,24 @@ class ReflexAgent(Agent):
         newScaredTimes = [ghostState.scaredTimer for ghostState in newGhostStates]
 
         "*** YOUR CODE HERE ***"
-        #print successorGameState
-        #print newPos
-        #print "----"
-        #print newFood
-        #print "----"
-        #print newGhostStates
-        #print newScaredTimes
-        score = successorGameState.getScore() 
-        print score
+        score = successorGameState.getScore()
+
+        minfooddist = -float("inf")
         listfood = newFood.asList()
+
+        # lower the food distance - better the score
+        # higher the food distance - least the score
+        # inversely proportional, hence reciprocate
         for food in listfood:
             fooddist = util.manhattanDistance(food, newPos)
-            if(fooddist!= 0):
+            if(fooddist != 0):
                 score = score + (1.0/fooddist)
 
+        # further the ghost distance, better the score
         for ghost in newGhostStates:
             ghostdist=manhattanDistance(ghost.getPosition(),newPos)
-            score = score + ghostdist
+            if(ghostdist > 1):
+                score = score + (1.0/ghostdist)
 
         return score
         #return successorGameState.getScore()

@@ -303,7 +303,7 @@ class CornersProblem(search.SearchProblem):
         """
         Returns whether this search state is a goal state of the problem.
         """
-        "*** YOUR CODE HERE ***"
+        # All corners visited
         return (len(state[1]) == 4)
 			
         util.raiseNotDefined()
@@ -330,18 +330,18 @@ class CornersProblem(search.SearchProblem):
             #   nextx, nexty = int(x + dx), int(y + dy)
             #   hitsWall = self.walls[nextx][nexty]
 
-            "*** YOUR CODE HERE ***"
             (x, y) = state[0]
             dx, dy = Actions.directionToVector(action)
             nextx, nexty = int(x + dx), int(y + dy)
             hitsWall = self.walls[nextx][nexty]
+            # If successor is not in food corners and is not a wall
             if not hitsWall :
                 if (nextx, nexty) in self.corners and (nextx, nexty) not in foundcorners:
-                     visited = foundcorners + [(nextx, nexty)]
+                     visited = foundcorners + [(nextx, nexty)] #mark visited
                      suc =  [[(nextx, nexty), visited], action, 1]
                 else:
                      suc =  [[(nextx, nexty), foundcorners], action, 1]
-                successors.append(suc)
+                successors.append(suc) #append position and visited corners in successor state
 
         self._expanded += 1 # DO NOT CHANGE
         return successors
@@ -378,7 +378,7 @@ def cornersHeuristic(state, problem):
 	# Get current state
     cur_s = state[0]
     cur_c = []
-	# Fill visisted corners
+	# Fill visited corners
     for i in state[1]:
         cur_c.append(i)
 
@@ -513,9 +513,11 @@ def foodHeuristic(state, problem):
     if not food:
          return 0;
 
+    #make as copy of the food grid
     for i in food:
         food_c.append(i)
 
+    #get the furthest successor using mazeDistance
     max_d1 = 0
     for i in food_c:
         man_d = mazeDistance(position, i, problem.getGameState())

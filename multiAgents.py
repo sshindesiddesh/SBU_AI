@@ -196,12 +196,59 @@ class AlphaBetaAgent(MultiAgentSearchAgent):
     """
       Your minimax agent with alpha-beta pruning (question 3)
     """
+    def get_max(self, gameState, agent, d, alpha, beta):
+        if (d == self.depth or gameState.isWin() or gameState.isLose()) :
+             return [self.evaluationFunction(gameState), Directions.STOP]
+        v = -float("inf")
+        a_out = Directions.STOP
+        action = gameState.getLegalActions(agent)
+        if not action:
+             return [self.evaluationFunction(gameState), Directions.STOP]
+        for a in action:
+             if (a == "Stop"):
+                continue
+             suc = gameState.generateSuccessor(agent, a)
+             [vl, al] = self.get_min(suc, agent + 1, d, alpha, beta)
+             if (vl > v) :
+                 v = vl
+                 a_out = a
+             if (v > beta) :
+                 return [v, a_out]
+             alpha = max(v, alpha)
+        return [v, a_out]
+
+    def get_min(self, gameState, agent, d, alpha, beta):
+        if (d == self.depth or gameState.isWin() or gameState.isLose()) :
+             return [self.evaluationFunction(gameState), Directions.STOP]
+        v = float("inf")
+        a_out = Directions.STOP
+        action = gameState.getLegalActions(agent)
+        if not action:
+             return [self.evaluationFunction(gameState), Directions.STOP]
+        action = gameState.getLegalActions(agent)
+        for a in action:
+            if (a == "Stop"):
+                continue
+            suc = gameState.generateSuccessor(agent, a)
+            if (agent % (gameState.getNumAgents() - 1) == 0):
+                [vl, al] = self.get_max(suc, 0, d + 1, alpha, beta)
+            else :
+                [vl, al] = self.get_min(suc, agent + 1, d, alpha, beta)
+            if (vl < v) :
+                v = vl
+                al_out = a
+            if (v < alpha):
+                return [v, al_out]
+            beta = min(v, beta)
+        return [v, a]
 
     def getAction(self, gameState):
         """
           Returns the minimax action using self.depth and self.evaluationFunction
         """
         "*** YOUR CODE HERE ***"
+        [v, a] = self.get_max(gameState, 0, 0, -float("inf"), float("inf"))
+        return a
         util.raiseNotDefined()
 
 class ExpectimaxAgent(MultiAgentSearchAgent):

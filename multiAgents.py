@@ -131,16 +131,12 @@ class MinimaxAgent(MultiAgentSearchAgent):
       Your minimax agent (question 2)
     """
     def get_max(self, gameState, agent, d):
-        print "MAX ", agent, d, self.depth
         if (d == self.depth or gameState.isWin() or gameState.isLose()) :
-             print "return"
              return [self.evaluationFunction(gameState), Directions.STOP]
         v = -float("inf")
         a_out = Directions.STOP
         action = gameState.getLegalActions(agent)
-        print action
         if not action:
-             print "NO action"
              return [self.evaluationFunction(gameState), Directions.STOP]
         for a in action:
              if (a == "Stop"):
@@ -150,21 +146,16 @@ class MinimaxAgent(MultiAgentSearchAgent):
              if (vl > v) :
                  v = vl
                  a_out = a
-        print "max", v
         return [v, a_out]
 
     def get_min(self, gameState, agent, d):
         if (d == self.depth or gameState.isWin() or gameState.isLose()) :
              return [self.evaluationFunction(gameState), Directions.STOP]
-
         v = float("inf")
         a_out = Directions.STOP
         action = gameState.getLegalActions(agent)
         if not action:
-             print "NO action"
              return [self.evaluationFunction(gameState), Directions.STOP]
-
-        print "NumAgents", gameState.getNumAgents()
         action = gameState.getLegalActions(agent)
         for a in action:
             if (a == "Stop"):
@@ -177,7 +168,6 @@ class MinimaxAgent(MultiAgentSearchAgent):
             if (vl < v) :
                 v = vl
                 al_out = a
-        
         return [v, a_out]
         
     def getAction(self, gameState):
@@ -198,17 +188,8 @@ class MinimaxAgent(MultiAgentSearchAgent):
             Returns the total number of agents in the game
         """
         "*** YOUR CODE HERE ***"
-        l_depth = 0
-        #print gameState.getLegalActions(0)
-        #print self.depth
-        #print self.evaluationFunction
         [v, a] = self.get_max(gameState, 0, 0)
-        #print a
         return a
-        import time
-        while (1) :
-            time.sleep(1)
-        #print gameState.generateSuccessor(0, )
         util.raiseNotDefined()
 
 class AlphaBetaAgent(MultiAgentSearchAgent):

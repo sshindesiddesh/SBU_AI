@@ -130,33 +130,51 @@ class MinimaxAgent(MultiAgentSearchAgent):
     """
       Your minimax agent (question 2)
     """
+
+    #max player
     def get_max(self, gameState, agent, d):
         if (d == self.depth or gameState.isWin() or gameState.isLose()) :
              return [self.evaluationFunction(gameState), Directions.STOP]
+
+        #initially max = -infinity
         v = -float("inf")
         a_out = Directions.STOP
+
+        #get legal moves/actions of the max player
         action = gameState.getLegalActions(agent)
         if not action:
              return [self.evaluationFunction(gameState), Directions.STOP]
+
+        #for every move/action of the max player, get the min move of the successive min player
         for a in action:
              if (a == "Stop"):
                 continue
              suc = gameState.generateSuccessor(agent, a)
              [vl, al] = self.get_min(suc, agent + 1, d)
+             #max player chooses the highest min move of the min player
              if (vl > v) :
                  v = vl
                  a_out = a
         return [v, a_out]
 
+    # min player
+	# we have multiple min players(min players = number of ghosts)
     def get_min(self, gameState, agent, d):
         if (d == self.depth or gameState.isWin() or gameState.isLose()) :
              return [self.evaluationFunction(gameState), Directions.STOP]
+
+        # initially min = infinity
         v = float("inf")
         a_out = Directions.STOP
+
+        #get legal moves/actions of the min player
         action = gameState.getLegalActions(agent)
         if not action:
              return [self.evaluationFunction(gameState), Directions.STOP]
-        action = gameState.getLegalActions(agent)
+
+		#for every  move/action of the min player, 
+		#get the min move of the successive min players, or,
+		#get the max move of the successive max players
         for a in action:
             if (a == "Stop"):
                 continue
@@ -165,6 +183,8 @@ class MinimaxAgent(MultiAgentSearchAgent):
                 [vl, al] = self.get_max(suc, 0, d + 1)
             else :
                 [vl, al] = self.get_min(suc, agent + 1, d)
+
+			#min player chooses the lowest move of the successive player
             if (vl < v) :
                 v = vl
                 al_out = a
@@ -196,36 +216,56 @@ class AlphaBetaAgent(MultiAgentSearchAgent):
     """
       Your minimax agent with alpha-beta pruning (question 3)
     """
+
+    #max player
     def get_max(self, gameState, agent, d, alpha, beta):
         if (d == self.depth or gameState.isWin() or gameState.isLose()) :
              return [self.evaluationFunction(gameState), Directions.STOP]
+
+        #initially max = -infinity
         v = -float("inf")
         a_out = Directions.STOP
+
+		#get legal moves/actions of the max player
         action = gameState.getLegalActions(agent)
         if not action:
              return [self.evaluationFunction(gameState), Directions.STOP]
+
+		#for every move/action of the max player, get the min move of the successive min player
         for a in action:
              if (a == "Stop"):
                 continue
              suc = gameState.generateSuccessor(agent, a)
              [vl, al] = self.get_min(suc, agent + 1, d, alpha, beta)
+
+			 #max player chooses the highest min move of the min player
              if (vl > v) :
                  v = vl
                  a_out = a
+			 #if the current highest min move is already greater than beta threshold, prune it
              if (v > beta) :
                  return [v, a_out]
+			 #update alpha threshold
              alpha = max(v, alpha)
         return [v, a_out]
 
+    #min player
     def get_min(self, gameState, agent, d, alpha, beta):
         if (d == self.depth or gameState.isWin() or gameState.isLose()) :
              return [self.evaluationFunction(gameState), Directions.STOP]
+
+        #initially min = infinity
         v = float("inf")
         a_out = Directions.STOP
+
+		#get legal moves/actions of the min player
         action = gameState.getLegalActions(agent)
         if not action:
              return [self.evaluationFunction(gameState), Directions.STOP]
-        action = gameState.getLegalActions(agent)
+
+		#for every  move/action of the min player,
+		#get the min move of the successive min players, or,
+		#get the max move of the successive max players
         for a in action:
             if (a == "Stop"):
                 continue
@@ -234,11 +274,15 @@ class AlphaBetaAgent(MultiAgentSearchAgent):
                 [vl, al] = self.get_max(suc, 0, d + 1, alpha, beta)
             else :
                 [vl, al] = self.get_min(suc, agent + 1, d, alpha, beta)
+
+			#min player chooses the lowest move of the successive player
             if (vl < v) :
                 v = vl
                 al_out = a
+			#if the current lowest move is already lesser than the alpha threshold, prune it
             if (v < alpha):
                 return [v, al_out]
+			#update beta threshold
             beta = min(v, beta)
         return [v, a]
 

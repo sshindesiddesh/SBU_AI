@@ -300,6 +300,65 @@ class ExpectimaxAgent(MultiAgentSearchAgent):
       Your expectimax agent (question 4)
     """
 
+	#max player
+    def get_max(self, gameState, agent, d):
+        if (d == self.depth or gameState.isWin() or gameState.isLose()) :
+             return [self.evaluationFunction(gameState), Directions.STOP]
+
+        #initially max = -infinity
+        v = -float("inf")
+        a_out = Directions.STOP
+
+        #get legal moves/actions of the max player
+        action = gameState.getLegalActions(agent)
+        if not action:
+             return [self.evaluationFunction(gameState), Directions.STOP]
+
+        #for every move/action of the max player, get the min move of the successive min player
+        for a in action:
+             if (a == "Stop"):
+                continue
+             suc = gameState.generateSuccessor(agent, a)
+             [vl, al] = self.get_min(suc, agent + 1, d)
+             #max player chooses the highest min move of the min player
+             if (vl > v) :
+                 v = vl
+                 a_out = a
+        return [v, a_out]
+
+    # min player
+    # we have multiple min players(min players = number of ghosts)
+    def get_min(self, gameState, agent, d):
+        if (d == self.depth or gameState.isWin() or gameState.isLose()) :
+             return [self.evaluationFunction(gameState), Directions.STOP]
+
+        # initially min = infinity
+        v = float("inf")
+        a_out = Directions.STOP
+
+        #get legal moves/actions of the min player
+        action = gameState.getLegalActions(agent)
+        if not action:
+             return [self.evaluationFunction(gameState), Directions.STOP]
+
+        #for every  move/action of the min player, 
+        #get the min move of the successive min players, or,
+        #get the max move of the successive max players
+        t = 0.0
+        for a in action:
+            if (a == "Stop"):
+                continue
+            suc = gameState.generateSuccessor(agent, a)
+            if (agent % (gameState.getNumAgents() - 1) == 0):
+                [vl, al] = self.get_max(suc, 0, d + 1)
+            else :
+                [vl, al] = self.get_min(suc, agent + 1, d)
+            #chance nodes take the average(expectation) of the minimax values 
+            t = t + (vl * 1.0)
+        avg = t/len(action)
+        return [avg, a_out]
+
+
     def getAction(self, gameState):
         """
           Returns the expectimax action using self.depth and self.evaluationFunction
@@ -308,6 +367,8 @@ class ExpectimaxAgent(MultiAgentSearchAgent):
           legal moves.
         """
         "*** YOUR CODE HERE ***"
+        [v, a] = self.get_max(gameState, 0, 0)
+        return a
         util.raiseNotDefined()
 
 def betterEvaluationFunction(currentGameState):

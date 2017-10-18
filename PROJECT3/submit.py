@@ -43,6 +43,7 @@ def rec_BT(L, M, V, D):
             V.append(d)
             # Remove d from possible Domains
             D.remove(d)
+
             # Call recursively to assign further variables from the domain
             if rec_BT(L, M, V, D) :
                 return 1
@@ -59,7 +60,9 @@ def BT(L, M):
     domain = []
     var = []
     "*** YOUR CODE HERE ***"
-    for i in range(0, L + 1):
+    var.append(0)
+    var.append(L)
+    for i in range(1, L):
         domain.append(i)
         
     rec_BT(L, M, var, domain)
@@ -70,6 +73,7 @@ def BT(L, M):
 #Your backtracking+Forward checking function implementation
 def FC(L, M):
     "*** YOUR CODE HERE ***"
+    
     return -1,[]
 
 #Bonus: backtracking + constraint propagation
@@ -78,4 +82,4 @@ def CP(L, M):
     return -1,[]
 
 print "Hello "
-BT (70, 10)
+BT (44, 9)

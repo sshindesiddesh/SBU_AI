@@ -110,4 +110,8 @@ def CP(L, M):
     return -1,[]
 
 print "Hello "
-BT (25, 7)
+import time
+ts = time.time()
+BT (55, 10)
+ts1 = time.time()
+print ts1-ts

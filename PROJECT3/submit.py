@@ -84,13 +84,15 @@ def rec_BT(L, M, V, D, Dist):
             for i in adddist :
                 Dist.append(i)
 
+            forward_check(V, D, Dist, rem)
+
             if rec_BT(L, M, V, D, Dist) :
                 return 1
             #print "BT:V1:",V
             #print "BT:D:",D
             #print "BT:rem:",rem
-            #for di in rem:
-            #        D.append(di)
+            for di in rem:
+                    D.append(di)
             # Remove assigned value to the variable
         
             for i in adddist :

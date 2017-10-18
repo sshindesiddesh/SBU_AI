@@ -16,11 +16,13 @@ def check_constraints(V, L, M):
                 return 0
     return 1
 
-def is_consistent(d, V):
+def is_consistent(d, V,dist):
+    #print "d-c", d
+    #print "V-c", V
+    #print "dist-c", dist
     if (len(V) == 0):
         return 1
     V.append(d)
-    dist = []
     for i in range(0, len(V)):
         for j in range(i + 1, len(V)):
             di = abs(V[j] - V[i])
@@ -32,21 +34,47 @@ def is_consistent(d, V):
     V.remove(d)
     return 1
 
+def forward_check(V,D,dist,rem):
+    #print "dist:",dist
+    #print "D:",D
+    for i in range(0,len(V)):
+        for j in range(0,len(dist)):
+            di = V[i]+dist[j]
+            if di in D:
+                rem.append(di)
+                D.remove(di)
+
 def rec_BT(L, M, V, D):
+    #print "V:",V
+    #print "D:",D
     if (check_constraints(V, L, M)):
         return 1
     # condition to check if all the variables are assigned
     #if (len(V < (M - 1)))
     for d in D :
-        if (is_consistent(d, V)):
+        #print "d:",d
+        dist = []
+        rem = []
+        if (is_consistent(d, V,dist)):
             # Assign value to a variable from domain
             V.append(d)
             # Remove d from possible Domains
+
             D.remove(d)
+            #print "V1:",V
+            #print "D1:",D
+            forward_check(V,D,dist,rem)
+            #print "D:",D
+            #print "rem:",rem
 
             # Call recursively to assign further variables from the domain
             if rec_BT(L, M, V, D) :
                 return 1
+            #print "BT:V1:",V
+            #print "BT:D:",D
+            #print "BT:rem:",rem
+            for di in rem:
+                    D.append(di)
             # Remove assigned value to the variable
             V.remove(d)
             # Add the domain to possible domains
@@ -82,4 +110,4 @@ def CP(L, M):
     return -1,[]
 
 print "Hello "
-BT (44, 9)
+BT (25, 7)

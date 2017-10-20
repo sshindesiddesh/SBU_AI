@@ -88,8 +88,84 @@ def BT(L, M):
         return L, var
     return -1,[]
 
+# Forward Checking
+def forward_check(d, V, D, adddist, rem):
+    for v in V:
+        for di in adddist:
+            if ((v + di) in D):
+                rem.append(v + di)
+                D.remove(v + di)
+
+# Recusrsive Back Tracking Function with forward checking
+def rec_FC(L, M, V, D, Dist):
+    # Check if all constraint are satisfied
+    if (check_constraints(V, L, M)):
+        return 1
+
+    # For all d in domain
+    for d in D :
+        # List to store newly calculated distances
+        adddist = []
+        # List to domain values rejected by FC
+        rem = []
+
+	# Check if d is consistent with current assignments
+        if (is_consistent(d, V, adddist, Dist)):
+            # Assign value to a variable from domain
+            V.append(d)
+            # Remove d from possible Domains
+            D.remove(d)
+
+            # Add the newly calculated distances to the distance list
+            for i in adddist:
+                Dist.append(i)
+
+            # 
+            forward_check(d, V, D, adddist, rem)
+            # Call recursively to assign further variables from the domain
+	    if rec_FC(L, M, V, D, Dist):
+	        return 1
+
+            # Remove domain values incdicated by FC
+            for di in rem:
+                    D.append(di)
+
+            # Remove distances specific the variable assignment d 
+            for di in adddist :
+                Dist.remove(di)
+
+            # Remove assigned value to the variable
+            V.remove(d)
+            # Add the domain to possible domains
+            D.append(d)
+    return 0
+
 #Your backtracking+Forward checking function implementation
 def FC(L, M):
+    # List for Domain
+    domain = []
+    # List for variable
+    var = []
+    # List for calculated distances
+    dist = []
+    
+    # Assign 0 and L 
+    var.append(0)
+    var.append(L)
+
+    # Add L to distance
+    dist.append(L)
+
+    # Populate possible domains
+    for i in range(1, L):
+        domain.append(i)
+        
+    # Call recursive BT 
+    rec_FC(L, M, var, domain, dist)
+    var.sort()
+    print var
+    if (var):
+        return L, var
     return -1,[]
 
 #Bonus: backtracking + constraint propagation
@@ -99,6 +175,10 @@ def CP(L, M):
 
 import time
 ts = time.time()
-BT (44, 9)
+#BT (72, 11)
+ts1 = time.time()
+print ts1-ts
+ts = time.time()
+FC (72, 11)
 ts1 = time.time()
 print ts1-ts

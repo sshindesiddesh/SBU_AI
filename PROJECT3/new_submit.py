@@ -61,11 +61,9 @@ def rec_BT(L, M, V, D, Dist):
     return 0
 
 #Your backtracking function implementation
-def BT(L, M):
+def call_BT(L, M, var):
     # List for Domain
     domain = []
-    # List for variable
-    var = []
     # List for calculated distances
     dist = []
     
@@ -83,7 +81,7 @@ def BT(L, M):
     # Call recursive BT 
     rec_BT(L, M, var, domain, dist)
     var.sort()
-    print var
+    #print var
     if (var):
         return L, var
     return -1,[]
@@ -95,6 +93,7 @@ def forward_check(d, V, D, adddist, rem):
             if ((v + di) in D):
                 rem.append(v + di)
                 D.remove(v + di)
+
 
 # Recusrsive Back Tracking Function with forward checking
 def rec_FC(L, M, V, D, Dist):
@@ -121,7 +120,7 @@ def rec_FC(L, M, V, D, Dist):
                 Dist.append(i)
 
             # 
-            forward_check(d, V, D, adddist, rem)
+            forward_check(d, V, D, Dist, rem)
             # Call recursively to assign further variables from the domain
 	    if rec_FC(L, M, V, D, Dist):
 	        return 1
@@ -141,11 +140,11 @@ def rec_FC(L, M, V, D, Dist):
     return 0
 
 #Your backtracking+Forward checking function implementation
-def FC(L, M):
+def call_FC(L, M, var):
     # List for Domain
     domain = []
     # List for variable
-    var = []
+    #var = []
     # List for calculated distances
     dist = []
     
@@ -159,11 +158,11 @@ def FC(L, M):
     # Populate possible domains
     for i in range(1, L):
         domain.append(i)
-        
+
     # Call recursive BT 
     rec_FC(L, M, var, domain, dist)
     var.sort()
-    print var
+    #print var
     if (var):
         return L, var
     return -1,[]
@@ -173,12 +172,50 @@ def CP(L, M):
     "*** YOUR CODE HERE ***"
     return -1,[]
 
+#Your backtracking+Forward checking function implementation
+def FC(L, M):
+    var = [0]
+    l = L
+    ans = [-1, []]
+    while (var):
+        var = []
+    	call_FC(l, M, var)
+        #print var
+        if ((len(var) > 2)):
+    	    var.sort()
+            ans[1] = var
+    	    l = var[len(var) - 1]
+            ans[0] = l
+            l = l - 1
+        else:
+            break
+    return ans
+
+#Your backtracking+Forward checking function implementation
+def BT(L, M):
+    var = [0]
+    l = L
+    ans = [-1, []]
+    while (var):
+        var = []
+    	call_BT(l, M, var)
+        #print var
+        if (len(var) > 2):
+    	    var.sort()
+            ans[1] = var
+    	    l = var[len(var) - 1]
+            ans[0] = l
+            l = l - 1
+        else:
+            break
+    return ans
+
 import time
 ts = time.time()
-#BT (72, 11)
+print FC (1, 2)
 ts1 = time.time()
 print ts1-ts
 ts = time.time()
-FC (72, 11)
+print BT (1, 2)
 ts1 = time.time()
 print ts1-ts

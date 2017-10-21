@@ -177,7 +177,7 @@ def CP(L, M):
     "*** YOUR CODE HERE ***"
     return -1,[]
 
-#Your backtracking+Forward checking function implementation
+#Your Backtracking+Forward Checking Function implementation
 def FC(L, M):
     global flag
     flag = 0
@@ -185,9 +185,11 @@ def FC(L, M):
     l = L
     ans = [-1, []]
     while (var):
+        global flag
+        flag = 0
         var = []
     	call_FC(l, M, var)
-        #print var
+        print var
         if (len(var) > 2 or (M == 2 and l > 0)):
     	    var.sort()
             ans[1] = var
@@ -198,7 +200,7 @@ def FC(L, M):
             break
     return ans
 
-#Your backtracking+Forward checking function implementation
+#Your Backtracking function implementation
 def BT(L, M):
     global flag
     flag = 0
@@ -206,10 +208,12 @@ def BT(L, M):
     l = L
     ans = [-1, []]
     while (var):
+        global flag
+        flag = 0
         var = []
     	call_BT(l, M, var)
         #print var
-        if (len(var) > 2 or (M == 2 and l > 0)):
+        if ((len(var) > 2) or (M == 2 and l > 0)):
     	    var.sort()
             ans[1] = var
     	    l = var[len(var) - 1]
@@ -221,10 +225,10 @@ def BT(L, M):
 
 import time
 ts = time.time()
-print FC (55, 10)
+print FC (10, 4)
 ts1 = time.time()
 print ts1-ts
 ts = time.time()
-#print BT (44, 9)
+print BT (10, 4)
 ts1 = time.time()
 print ts1-ts

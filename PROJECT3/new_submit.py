@@ -1,5 +1,4 @@
-#do not modify the function names
-#You are given L and M as input
+#Given L and M as input
 #Each of your functions should return the minimum possible L value alongside the marker positions
 #Or return -1,[] if no solution exists for the given L
 
@@ -24,9 +23,9 @@ def is_consistent(d, V, addist, Dist):
 
 # Recusrsive Back Tracking Function
 def rec_BT(L, M, V, D, Dist):
+    global flag
     # Check if all constraint are satisfied
     if (check_constraints(V, L, M)):
-	global flag
 	flag = 1
         return 1
 
@@ -83,7 +82,6 @@ def call_BT(L, M, var):
     # Call recursive BT 
     rec_BT(L, M, var, domain, dist)
     var.sort()
-    #print var
     if (var):
         return L, var
     return -1,[]
@@ -98,9 +96,9 @@ def forward_check(d, V, D, adddist, rem):
 
 # Recusrsive Back Tracking Function with forward checking
 def rec_FC(L, M, V, D, Dist):
+    global flag
     # Check if all constraint are satisfied
     if (check_constraints(V, L, M)):
-	global flag
 	flag = 1
         return 1
 
@@ -144,7 +142,7 @@ def rec_FC(L, M, V, D, Dist):
             D.append(d)
     return 0
 
-#Your backtracking+Forward checking function implementation
+# Backtracking+Forward checking function implementation
 def call_FC(L, M, var):
     # List for Domain
     domain = []
@@ -167,29 +165,27 @@ def call_FC(L, M, var):
     # Call recursive BT 
     rec_FC(L, M, var, domain, dist)
     var.sort()
-    #print var
     if (var):
         return L, var
     return -1,[]
 
-#Bonus: backtracking + constraint propagation
+# Bonus: backtracking + constraint propagation
 def CP(L, M):
     "*** YOUR CODE HERE ***"
     return -1,[]
 
-#Your Backtracking+Forward Checking Function implementation
+#Backtracking+Forward Checking Function implementation with optimised length
 def FC(L, M):
     global flag
     flag = 0
     var = [0]
     l = L
     ans = [-1, []]
+    # Check starting from L. Decrement until empty solution
     while (var):
-        global flag
         flag = 0
         var = []
     	call_FC(l, M, var)
-        print var
         if (len(var) > 2 or (M == 2 and l > 0)):
     	    var.sort()
             ans[1] = var
@@ -200,19 +196,18 @@ def FC(L, M):
             break
     return ans
 
-#Your Backtracking function implementation
+# Backtracking function implementation with optimised length
 def BT(L, M):
     global flag
     flag = 0
     var = [0]
     l = L
     ans = [-1, []]
+    # Check starting from L. Decrement until empty solution
     while (var):
-        global flag
         flag = 0
         var = []
     	call_BT(l, M, var)
-        #print var
         if ((len(var) > 2) or (M == 2 and l > 0)):
     	    var.sort()
             ans[1] = var
@@ -222,13 +217,3 @@ def BT(L, M):
         else:
             break
     return ans
-
-import time
-ts = time.time()
-print FC (10, 4)
-ts1 = time.time()
-print ts1-ts
-ts = time.time()
-print BT (10, 4)
-ts1 = time.time()
-print ts1-ts

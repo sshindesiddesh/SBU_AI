@@ -3,6 +3,8 @@
 #Each of your functions should return the minimum possible L value alongside the marker positions
 #Or return -1,[] if no solution exists for the given L
 
+flag = 0
+
 # Check if all constraints are satisfied
 def check_constraints(V, L, M):
     if (len(V) != M):
@@ -24,10 +26,14 @@ def is_consistent(d, V, addist, Dist):
 def rec_BT(L, M, V, D, Dist):
     # Check if all constraint are satisfied
     if (check_constraints(V, L, M)):
+	global flag
+	flag = 1
         return 1
 
     # For all d in domain
-    for d in D :
+    for d in D:
+	if (flag == 1):
+		return 0;
         # List to store newly calculated distances
         adddist = []
 
@@ -90,15 +96,18 @@ def forward_check(d, V, D, adddist, rem):
                 rem.append(v + di)
                 D.remove(v + di)
 
-
 # Recusrsive Back Tracking Function with forward checking
 def rec_FC(L, M, V, D, Dist):
     # Check if all constraint are satisfied
     if (check_constraints(V, L, M)):
+	global flag
+	flag = 1
         return 1
 
     # For all d in domain
     for d in D :
+	if (flag == 1):
+		return 0;
         # List to store newly calculated distances
         adddist = []
         # List to domain values rejected by FC
@@ -170,6 +179,8 @@ def CP(L, M):
 
 #Your backtracking+Forward checking function implementation
 def FC(L, M):
+    global flag
+    flag = 0
     var = [0]
     l = L
     ans = [-1, []]
@@ -189,6 +200,8 @@ def FC(L, M):
 
 #Your backtracking+Forward checking function implementation
 def BT(L, M):
+    global flag
+    flag = 0
     var = [0]
     l = L
     ans = [-1, []]
@@ -208,10 +221,10 @@ def BT(L, M):
 
 import time
 ts = time.time()
-print FC (34, 8)
+print FC (55, 10)
 ts1 = time.time()
 print ts1-ts
 ts = time.time()
-print BT (34, 8)
+#print BT (44, 9)
 ts1 = time.time()
 print ts1-ts

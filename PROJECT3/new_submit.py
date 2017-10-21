@@ -5,11 +5,7 @@
 
 # Check if all constraints are satisfied
 def check_constraints(V, L, M):
-    if (not V):
-        return 0;
     if (len(V) != M):
-        return 0;
-    if (len(V) > (len(set(V)))):
         return 0;
     return 1
 
@@ -120,7 +116,7 @@ def rec_FC(L, M, V, D, Dist):
                 Dist.append(i)
 
             # 
-            forward_check(d, V, D, Dist, rem)
+            forward_check(d, V, D, adddist, rem)
             # Call recursively to assign further variables from the domain
 	    if rec_FC(L, M, V, D, Dist):
 	        return 1
@@ -181,7 +177,7 @@ def FC(L, M):
         var = []
     	call_FC(l, M, var)
         #print var
-        if ((len(var) > 2)):
+        if (len(var) > 2 or (M == 2 and l > 0)):
     	    var.sort()
             ans[1] = var
     	    l = var[len(var) - 1]
@@ -200,7 +196,7 @@ def BT(L, M):
         var = []
     	call_BT(l, M, var)
         #print var
-        if (len(var) > 2):
+        if (len(var) > 2 or (M == 2 and l > 0)):
     	    var.sort()
             ans[1] = var
     	    l = var[len(var) - 1]
@@ -212,10 +208,10 @@ def BT(L, M):
 
 import time
 ts = time.time()
-print FC (1, 2)
+print FC (34, 8)
 ts1 = time.time()
 print ts1-ts
 ts = time.time()
-print BT (1, 2)
+print BT (34, 8)
 ts1 = time.time()
 print ts1-ts

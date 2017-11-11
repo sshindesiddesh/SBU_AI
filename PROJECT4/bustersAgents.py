@@ -165,6 +165,7 @@ class GreedyBustersAgent(BustersAgent):
         "*** YOUR CODE HERE ***"
 
         mindist = float("inf")
+        closestghost_dist = float("inf")
 
         #The most likely position of the ghost is the one with the highest probability
         #From the given distribution, we find the ghost position with the highest probability
@@ -176,21 +177,20 @@ class GreedyBustersAgent(BustersAgent):
                 if distr[ghostpos] > maxprob:
                     maxprob = distr[ghostpos]
                     maxprob_ghostpos = ghostpos
+                    #We calculate the minimum distance to the ghost position that has maximum probability
+                    cdist = self.distancer.getDistance(pacmanPosition, maxprob_ghostpos)
+                    if cdist < mindist:
+                        mindist = cdist
+                        #mindist_ghostpos = maxprob_ghostpos
 
-            #We calculate the minimum distance to the ghost position that has maximum probability
-            cdist = self.distancer.getDistance(pacmanPosition, maxprob_ghostpos)
-            if cdist < mindist:
-                mindist = cdist
-                mindist_ghostpos = maxprob_ghostpos
-
-        closestghost_dist = mindist
+        #closestghost_dist = mindist
 
         #We choose the next best action that the pacman must take by finding the least distance
         #from its possible successive positions to the above found ghost position 
         for action in legal:
             successorPosition = Actions.getSuccessor(pacmanPosition, action)
-            successorDistance = self.distancer.getDistance(successorPosition, mindist_ghostpos)
-            if successorDistance <= closestghost_dist:
+            successorDistance = self.distancer.getDistance(successorPosition, maxprob_ghostpos)
+            if successorDistance < closestghost_dist:
                 closestghost_dist = successorDistance
                 nextbestaction = action
         

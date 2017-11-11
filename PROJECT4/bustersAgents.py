@@ -181,9 +181,6 @@ class GreedyBustersAgent(BustersAgent):
                     cdist = self.distancer.getDistance(pacmanPosition, maxprob_ghostpos)
                     if cdist < mindist:
                         mindist = cdist
-                        #mindist_ghostpos = maxprob_ghostpos
-
-        #closestghost_dist = mindist
 
         #We choose the next best action that the pacman must take by finding the least distance
         #from its possible successive positions to the above found ghost position 
